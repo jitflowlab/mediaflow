@@ -22,7 +22,5 @@ function entrypoint() {
     wait
 }
 
-cd /app
-
 entrypoint
 
