@@ -11,13 +11,7 @@ function sigterm_handler() {
 trap "sigterm_handler; exit" TERM
 
 function entrypoint() {
-    if [ "$ARGC" -eq 0 ]
-    then
-        forever start server.js
-    else
-        forever start $ARGV
-    fi
-
+    forever start /app/server.js
     forever --fifo logs 0 &
     wait
 }
