@@ -1,25 +1,30 @@
 
 const Utility = require('./Utility');
 
-const accepted = [
+const methods = [
     'resize',
     'crop',
     'max',
     'rotate',
     'greyscale'
 ];
-const acceptedOutput = ['png', 'jpeg', 'jpg', 'webp', 'tiff'];
+const accepted = ['png', 'jpeg', 'jpg', 'webp', 'tiff'];
 const sharp = require('sharp');
 
 class Photo {
-    static isPhoto (file) {
-        return acceptedOutput.includes(Utility.getExtension(file));
+    constructor (id, file) {
+        this._id = id;
+        this._file = file;
     }
 
-    static async process (file, action) {
-        const transformer = sharp(file.buffer);
+    static isPhoto (file) {
+        return accepted.includes(Utility.getExtension(file));
+    }
+
+    async process (action) {
+        const transformer = sharp(this._file.buffer);
         for (let key of Object.keys(action)) {
-            if (accepted.includes(key)) {
+            if (methods.includes(key)) {
                 const value = action[key];
                 let params = [];
                 if (typeof value === 'string') {
@@ -40,7 +45,7 @@ class Photo {
         if (output === 'jpg') {
             output = 'jpeg';
         }
-        if (!acceptedOutput.includes(output)) {
+        if (!accepted.includes(output)) {
             throw new Error(`"${output}" is not a valid output.`);
         }
         transformer[output]();

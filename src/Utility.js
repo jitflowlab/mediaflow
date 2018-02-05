@@ -1,7 +1,7 @@
 
 class Utility {
     static getExtension (file) {
-        return file.split('.').pop();
+        return file.split('.').pop().toLowerCase();
     }
 
     static generateId (length = 32) {
