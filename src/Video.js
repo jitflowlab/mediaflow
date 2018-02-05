@@ -7,9 +7,12 @@ const exec = require('child_process').execSync;
 const tmpDir = path.join(__dirname, '../', 'tmp');
 const bin = process.env.FFMPEG_PATH || 'ffmpeg';
 const acceptedInput = ['mp4', 'mov', 'avi'];
-const acceptedOutput = ['mp4', 'webm'];
+const acceptedOutput = ['mp4', 'webm', 'png'];
 
 const commands = {
+    png: [
+        '{BIN} -i {INPUT} -ss 00:00:14.435 -vf scale={SCALE} -vframes 1 {OUTPUT}'
+    ],
     mp4: [
         '{BIN} -i {INPUT} -vcodec h264 -acodec aac -strict -2 {OUTPUT}'
     ],
@@ -50,7 +53,8 @@ class Video {
             const replacements = {
                 BIN: bin,
                 INPUT: fileInput,
-                OUTPUT: fileOutput
+                OUTPUT: fileOutput,
+                SCALE: action.scale || ''
             };
             command = command.replace(/\{([A-Z]+)\}/g, function () {
                 if (replacements[arguments[1]] !== undefined) {
