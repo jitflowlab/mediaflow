@@ -53,7 +53,7 @@ class Photo {
         const buffer = await transformer.toBuffer();
         return {
             output: output,
-            base64: new Buffer(buffer).toString('base64')
+            base64: Buffer.from(buffer, 'base64')
         };
     }
 }
