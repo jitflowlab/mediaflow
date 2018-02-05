@@ -50,10 +50,10 @@ class Photo {
         }
         transformer[output]();
 
-        // await transformer.toBuffer()
+        const buffer = await transformer.toBuffer();
         return {
             output: output,
-            base64: await transformer.toBuffer()
+            base64: new Buffer(buffer).toString('base64')
         };
     }
 }
