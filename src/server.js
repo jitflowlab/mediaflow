@@ -11,6 +11,7 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 const app = express();
 const path = require('path');
+const manifest = require('./../package.json');
 
 const tmpDir = path.join(__dirname, '../', 'tmp');
 const debug = true;
@@ -26,6 +27,10 @@ function deleteFiles (files) {
         fs.unlink(file, () => true);
     });
 }
+
+app.get('/', function (req, res) {
+    return res.send('MediaFlow (' + manifest.version + ')');
+});
 
 app.post('/', async function (req, res) {
     const main = async function () {
@@ -123,3 +128,8 @@ app.post('/', async function (req, res) {
 });
 
 app.listen(process.env.PORT || 3030);
+
+console.group('Running MediaFlow (' + manifest.version + ')');
+console.log('Port:', process.env.PORT || 3030);
+console.log('FFMPEG Path:', process.env.FFMPEG_PATH || 'ffmpeg');
+console.groupEnd();
