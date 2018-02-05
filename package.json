@@ -2,9 +2,12 @@
   "name": "@jitflowlab/mediaflow",
   "version": "1.0.0",
   "description": "Photo Flow",
+  "repository": "github:jitflowlab/mediaflow",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test:mocha && npm run test:lint",
+    "test:mocha": "./node_modules/.bin/mocha ./test/upload.js",
+    "test:lint": "./node_modules/.bin/eslint ./src/**"
   },
   "author": "JitFlow",
   "license": "MIT",
@@ -17,6 +20,12 @@
     "node-fetch": "^2.0.0"
   },
   "devDependencies": {
+    "eslint": "^4.17.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^6.0.0",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
     "mocha": "^5.0.0"
   }
 }

@@ -1,5 +1,7 @@
+/* eslint-env node, mocha */
 
 const utility = require('./utility');
+const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').execSync;
@@ -52,25 +54,24 @@ const tests = [
     }
 ];
 
-const test = async function () {
-    for (let test of tests) {
-        if (test.file === 'test.avi') {
-            continue;
-        }
-        console.group('Test: ' + JSON.stringify(test));
-        const res = await utility.post(test);
-        if (res.files.length) {
-            for (let file of res.files) {
-                fs.writeFileSync(path.join(tmpDir, file.id + '.' + file.output), Buffer.from(file.base64, 'base64'));
-                console.log('File:', file.id + '.' + file.output);
-            }
-        }
-        console.groupEnd();
-    }
-};
+describe('Uploads', function () {
+    this.timeout(0);
 
-test().catch(e => {
-    console.log(e.stack);
-    process.exit(1);
+    for (let test of tests) {
+        describe('Test: ' + JSON.stringify(test), function () {
+            it(`should return ${test.action.length} processed files.`, async function () {
+                const res = await utility.post(test);
+                assert.equal(test.action.length, res.files.length);
+                if (res.files.length) {
+                    for (let file of res.files) {
+                        fs.writeFileSync(
+                            path.join(tmpDir, file.id + '.' + file.output),
+                            Buffer.from(file.base64, 'base64')
+                        );
+                    }
+                }
+            });
+        });
+    }
 });
 
