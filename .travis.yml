@@ -10,5 +10,5 @@ services:
 
 before_install:
   - docker build -t mediaflow:latest .
-  - docker run -it -p 3030:3030 --name mediaflow mediaflow:latest
+  - docker run -d -p 3030:3030 --name mediaflow mediaflow:latest
   - docker ps -a
