@@ -76,7 +76,7 @@ class Video {
 
         return {
             output: output,
-            base64: buffer
+            base64: Buffer.from(buffer, 'base64')
         };
     }
 

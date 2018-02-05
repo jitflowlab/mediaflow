@@ -3,6 +3,8 @@
 export ARGV="$@"
 export ARGC="$#"
 
+export FFMPEG_PATH=$(which ffmpeg)
+
 function sigterm_handler() {
     echo "SIGTERM signal received."
     forever stopall
