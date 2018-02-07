@@ -21,4 +21,4 @@ RUN npm install -g forever && \
 
 ENV VOLUME_PATH /app/
 
-ENTRYPOINT ["bash", "/usr/local/bin/entrypoint"]
+ENTRYPOINT ["bash", "/usr/local/bin/entrypoint", "2>&1"]
