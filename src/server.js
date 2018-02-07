@@ -55,6 +55,7 @@ app.post('/', async function (req, res) {
 
             for (let file of files) {
                 !debug || console.group('File: ' + file.originalname);
+                !debug || console.log(file);
                 for (let action of actions) {
                     !debug || console.group('Action:' + JSON.stringify(action));
                     const object = (function () {
@@ -109,6 +110,7 @@ app.post('/', async function (req, res) {
                 }
                 !debug || console.groupEnd();
             }
+            !debug || console.log('End');
             !debug || console.groupEnd();
         }
 
@@ -127,9 +129,11 @@ app.post('/', async function (req, res) {
     }));
 });
 
-app.listen(process.env.PORT || 3030);
+const server = app.listen(process.env.PORT || 3030);
+server.timeout = 0;
 
 console.group('Running MediaFlow (' + manifest.version + ')');
 console.log('Port:', process.env.PORT || 3030);
 console.log('FFMPEG Path:', process.env.FFMPEG_PATH || 'ffmpeg');
+console.log('Timeout:', server.timeout);
 console.groupEnd();

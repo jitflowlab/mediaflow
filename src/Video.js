@@ -5,6 +5,7 @@ const path = require('path');
 const exec = require('child_process').execSync;
 
 const tmpDir = path.join(__dirname, '../', 'tmp');
+const logDir = path.join(__dirname, '../', 'log');
 const bin = process.env.FFMPEG_PATH || 'ffmpeg';
 const acceptedInput = ['mp4', 'mov', 'avi'];
 const acceptedOutput = ['mp4', 'webm', 'png'];
@@ -23,6 +24,10 @@ const commands = {
 
 if (!fs.existsSync(tmpDir)) {
     fs.mkdirSync(tmpDir);
+}
+
+if (!fs.existsSync(logDir)) {
+    fs.mkdirSync(logDir);
 }
 
 class Video {
@@ -47,7 +52,11 @@ class Video {
         const fileOutput = path.join(tmpDir, id + '.' + output);
 
         if (!fs.existsSync(fileInput)) {
+            console.log('Input file:', fileInput);
             fs.writeFileSync(fileInput, this._file.buffer);
+            if (!fs.existsSync(fileInput)) {
+                throw new Error(`"${fileInput}" input file does not exist.`);
+            }
         }
         for (let command of commands[output]) {
             const replacements = {
@@ -62,9 +71,11 @@ class Video {
                 }
                 return '';
             });
-            console.log('command', command);
+            console.log('Command:', command);
             try {
-                exec(command);
+                exec('echo "## ' + this._id + ' ##" >> ' + logDir + '/mediaflow.log 2>&1');
+                exec(command + ' >> ' + logDir + '/mediaflow.log 2>&1');
+
                 if (fs.existsSync(fileOutput)) {
                     console.log('FILE_EXISTS', 'Skipping next command.');
                     break;
@@ -72,6 +83,10 @@ class Video {
             } catch (e) {
                 console.log('FAILED:', e.stack);
             }
+        }
+
+        if (!fs.existsSync(fileOutput)) {
+            throw new Error('FFMPEG failed on: ' + fileOutput);
         }
 
         const buffer = fs.readFileSync(fileOutput);
@@ -82,10 +97,6 @@ class Video {
             output: output,
             base64: Buffer.from(buffer, 'base64')
         };
-    }
-
-    processMP4 () {
-
     }
 }
 
