@@ -11,8 +11,8 @@ RUN mkdir ffmpeg-static \
         && rm -r ffmpeg-static /ffmpeg.static.tar.xz
 
 # Entrypoint
-ADD docker/entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh
+ADD docker/entrypoint /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint
 
 ADD . /app/
 
@@ -21,4 +21,4 @@ RUN npm install -g forever && \
 
 ENV VOLUME_PATH /app/
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["bash", "/usr/local/bin/entrypoint"]
